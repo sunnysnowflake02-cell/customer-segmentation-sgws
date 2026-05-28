@@ -1,0 +1,45 @@
+version: v1
+lens: supply-chain-test
+description: Semantic join graph for this product. Each Lens SQL file remains a single-table SELECT; relationships below define
+  how logical tables connect for analytics and validation.
+edges:
+- left_table: inventory
+  right_table: warehouses
+  left_fqn: icebase.supply_chain.inventory
+  right_fqn: icebase.supply_chain.warehouses
+  join_on:
+  - left: warehouse_id
+    right: warehouse_id
+  cardinality: many_to_one
+  id: 65def5b4-2f00-45e7-8c4a-642dd74e8854
+  rationale: Linking inventory to warehouses to analyze stock levels per warehouse.
+- left_table: orders
+  right_table: order_items
+  left_fqn: icebase.supply_chain.orders
+  right_fqn: icebase.supply_chain.order_items
+  join_on:
+  - left: order_id
+    right: order_id
+  cardinality: one_to_many
+  id: fea16581-1247-4fbd-96bb-ad9da497ccbc
+  rationale: Connecting orders to their items to analyze order details.
+- left_table: shipments
+  right_table: orders
+  left_fqn: icebase.supply_chain.shipments
+  right_fqn: icebase.supply_chain.orders
+  join_on:
+  - left: order_id
+    right: order_id
+  cardinality: one_to_one
+  id: c5887140-4f3f-4c2b-a0a1-71ad1f8cdfad
+  rationale: Linking shipments to orders to track fulfillment.
+- left_table: warehouses
+  right_table: geolocation
+  left_fqn: icebase.supply_chain.warehouses
+  right_fqn: icebase.supply_chain.geolocation
+  join_on:
+  - left: zip_code
+    right: zip_code
+  cardinality: one_to_one
+  id: be431bd6-fc7e-4eaa-aafd-0f51099b1b61
+  rationale: Mapping warehouse zip codes to geolocation for lead-time analysis.

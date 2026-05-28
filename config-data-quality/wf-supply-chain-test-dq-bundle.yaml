@@ -1,0 +1,73 @@
+name: wf-supply-chain-test-dq-bundle
+version: v1
+type: workflow
+tags:
+  - Quality.BusinessRule
+  - Tier.Generated
+  - SemanticModelAgent
+description: |
+  Consolidated business-rule data quality checks for this lens. One workflow;
+  multiple source datasets under stackSpec.inputs.
+workspace: public
+workflow:
+  dag:
+    - name: supply-chain-test-dq-bundle
+      description: |
+        Consolidated DQ checks for approved steward rules (multi-table).
+      title: Consolidated business validation checks
+      spec:
+        stack: soda+python:1.0
+        logLevel: INFO
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:supply_chain/inventory
+              options:
+                engine: minerva
+                clusterName: minervac
+              checks:
+                - row_count > 0:
+                    attributes:
+                      category: Freshness
+                      description: "Table must have data"
+                - failed rows:
+                    name: quantity_check_stock_reorder
+                    fail condition: quantity_in_stock <= reorder_qty
+                    attributes:
+                      category: Validity
+                      description: "The `quantity_in_stock` in the inventory table must always be greater than or equal to the `reorder_qty`. This validation helps prevent stockouts and ensures that inventory management practices are proactive. The profiling shows a mix of stock levels, indicating that this rule is essential to enforce."
+              profile:
+                columns:
+                  - "*"
+
+            - dataset: dataos://icebase:supply_chain/shipments
+              options:
+                engine: minerva
+                clusterName: minervac
+              checks:
+                - row_count > 0:
+                    attributes:
+                      category: Freshness
+                      description: "Table must have data"
+                - failed rows:
+                    name: delivered_date_not_future
+                    fail condition: TRY_CAST(delivered_date AS DATE) > CURRENT_DATE
+                    attributes:
+                      category: Validity
+                      description: "The `delivered_date` in the shipments table should reflect actual delivery dates and must not be set in the future. This check is crucial for accurate reporting and forecasting. The current data includes dates that extend into the future, which would invalidate historical analyses."
+                - failed rows:
+                    name: interim_units_check
+                    fail condition: interim_units_delivered > quantity_in_stock
+                    attributes:
+                      category: Validity
+                      description: "The `interim_units_delivered` column in the shipments table should not exceed the available `quantity_in_stock` in the inventory. This ensures that shipments do not exceed what is available, maintaining stock integrity. The current profiling indicates a small number of rows where this could potentially be violated, necessitating a check against the inventory levels."
+              profile:
+                columns:
+                  - "*"

@@ -1,0 +1,53 @@
+tables:
+  - name: orders
+    title: Orders Data
+    sql: {{ load_sql('orders') }}
+    description: Table containing details about customer orders.
+    public: true
+    joins:
+      - name: order_items
+        relationship: one_to_many
+        sql: "{TABLE}.order_id = {order_items.order_id}"
+    dimensions:
+      - name: order_id
+        description: The unique identifier for the order.
+        type: number
+        column: order_id
+        primary_key: true
+        public: true
+      - name: order_creation_date
+        description: The date and time when the order was created.
+        type: time
+        column: order_creation_date
+        public: true
+      - name: customer_id
+        description: The unique identifier for the customer who placed the order.
+        type: number
+        column: customer_id
+        public: true
+      - name: delivery_address
+        description: The delivery address for the order.
+        type: string
+        column: delivery_address
+        public: true
+        meta:
+          secure:
+            func: redact
+            user_groups:
+              includes:
+                - masking_redacted
+      - name: zip_code
+        description: The zip code for the delivery address.
+        type: number
+        column: zip_code
+        public: true
+      - name: delivery_date_chosen
+        description: The date chosen for delivery by the customer.
+        type: time
+        column: delivery_date_chosen
+        public: true
+    measures:
+      - name: row_count
+        description: Distinct rows at natural grain (count distinct on primary key column).
+        type: count
+        sql: "{TABLE.order_id}"

@@ -1,0 +1,62 @@
+name: supply-chain-test
+version: v1alpha
+type: lens
+tags:
+  - Tier.Generated
+  - SemanticModelAgent
+description: |
+  The supply-chain-test lens provides stakeholders with a comprehensive view of inventory levels, warehouse performance, and fulfillment logistics, facilitating informed decision-making across the supply chain. By integrating data from various entities such as orders, shipments, and delivery locations, this lens enables organizations to transition to a proactive Supply Chain Control Tower model. The inclusion of geospatial analysis enhances lead-time assessments, allowing for better optimization of stock availability and delivery reliability. This centralized intelligence layer empowers teams to identify inefficiencies and streamline operations, ultimately improving overall supply chain performance.
+layer: user
+owner: manpreetsingh
+workspace: public
+lens:
+  compute: runnable-default
+  secrets:
+    - name: githubrepo
+      allKeys: true
+  source:
+    type: minerva
+    name: minervac
+    catalog: icebase
+  repo:
+    url: https://github.com/sunnysnowflake02-cell/customer-segmentation-sgws
+    lensBaseDir: model
+    syncFlags:
+      - --ref=main
+  api:
+    logLevel: info
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  router:
+    logLevel: info
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  worker:
+    logLevel: info
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  metric:
+    logLevel: info
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi

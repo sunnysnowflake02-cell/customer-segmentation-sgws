@@ -1,0 +1,128 @@
+name: supply-chain-test-cadp
+version: v1beta
+entity: product
+type: data
+purpose: 'supply-chain-test
+
+  '
+tags:
+- DPTier.Consumer Aligned
+- SemanticModelAgent
+description: 'supply-chain-test
+
+  '
+owner: manpreetsingh
+v1beta:
+  data:
+    meta:
+      title: Supply Chain Test
+      sourceCodeUrl: https://github.com/sunnysnowflake02-cell/customer-segmentation-sgws
+    collaborators:
+    - name: manpreetsingh
+      description: owner
+    resource:
+      description: 'This product helps teams track outcomes, spot issues early, and
+        align decisions for supply-chain-test.
+
+
+        It packages steward-approved sources into one consistent analytic view so
+        everyone works from the same definitions for metrics and dimensions.
+
+
+        Technical validation and deployment notes are included in the bundle for platform
+        operators.
+
+        '
+      type: bundle
+      version: v1beta
+      refType: dataos
+      ref: bundle:v1beta:supply-chain-test-bundle
+    inputs:
+    - name: icebase_supply_chain_geolocation_input
+      description: 'Operational data describing geolocation in the supply chain area.
+        Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:supply_chain/geolocation
+    - name: icebase_supply_chain_inventory_input
+      description: 'Operational data describing inventory in the supply chain area.
+        Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:supply_chain/inventory
+    - name: icebase_supply_chain_order_items_input
+      description: 'Operational data describing order items in the supply chain area.
+        Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:supply_chain/order_items
+    - name: icebase_supply_chain_orders_input
+      description: 'Operational data describing orders in the supply chain area. Supports
+        shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:supply_chain/orders
+    - name: icebase_supply_chain_shipments_input
+      description: 'Operational data describing shipments in the supply chain area.
+        Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:supply_chain/shipments
+    - name: icebase_supply_chain_warehouses_input
+      description: 'Operational data describing warehouses in the supply chain area.
+        Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:supply_chain/warehouses
+    - name: icebase_supply_chain_warehouses_ranking_input
+      description: 'Operational data describing warehouses ranking in the supply chain
+        area. Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:supply_chain/warehouses_ranking
+    outputs: []
+    ports:
+      lens:
+        ref: lens:v1alpha:supply-chain-test:public
+        refType: dataos
+        meta:
+          description: 'Business-ready semantic model for this data product domain.
+
+            '
+      rest:
+      - url: https://known-racer.mydataos.com/lens2/api/public:supply-chain-test/v2/rest
+        meta:
+          description: 'REST API for programmatic access to the semantic model (filters
+            and measures as exposed by the deployed Lens).
+
+            '
+      postgres:
+      - host: tcp.known-racer.mydataos.com
+        port: 5432
+        params:
+          ssl: true
+        meta:
+          description: 'PostgreSQL access for BI tools against the semantic layer
+            (when enabled for this workspace).
+
+            '
+      graphql:
+      - url: https://known-racer.mydataos.com/lens2/api/public:supply-chain-test/v2/graphql
+        meta:
+          description: 'GraphQL API for flexible queries over the semantic model schema.
+
+            '

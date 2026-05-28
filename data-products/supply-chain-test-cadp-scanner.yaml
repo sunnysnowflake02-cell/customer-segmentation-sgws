@@ -1,0 +1,26 @@
+version: v1
+name: wf-supply-chain-test-cadp-sc
+type: workflow
+description: |
+  Scanner workflow for consumer-aligned data product supply-chain-test-cadp (metadata registration in DataOS).
+tags:
+  - Tier.Gold
+  - SemanticModelAgent
+workspace: public
+workflow:
+  dag:
+    - name: supply-chain-test-cadp-scan
+      description: Scanner for supply-chain-test-cadp (data product metadata registration).
+      title: Supply Chain Test Cadp CADP scanner
+      spec:
+        stack: scanner:2.0
+        compute: runnable-default
+        stackSpec:
+          type: data-product
+          sourceConfig:
+            config:
+              type: DataProductMetadata
+              markDeletedDataProducts: true
+              dataProductFilterPattern:
+                includes:
+                  - supply-chain-test-cadp

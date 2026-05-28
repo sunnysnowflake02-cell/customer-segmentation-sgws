@@ -1,0 +1,77 @@
+tables:
+  - name: warehouses
+    title: Warehouses Data
+    sql: {{ load_sql('warehouses') }}
+    description: Table containing details about warehouses and their performance metrics.
+    public: true
+    joins:
+      - name: geolocation
+        relationship: one_to_one
+        sql: "{TABLE}.zip_code = {geolocation.zip_code}"
+    dimensions:
+      - name: warehouse_id
+        description: The unique identifier for the warehouse.
+        type: number
+        column: warehouse_id
+        primary_key: true
+        public: true
+      - name: district
+        description: The district where the warehouse is located.
+        type: string
+        column: district
+        public: true
+      - name: zip_code
+        description: The zip code for the warehouse location.
+        type: number
+        column: zip_code
+        public: true
+      - name: wh_orders_lw
+        description: The number of orders in the last week.
+        type: number
+        column: wh_orders_lw
+        public: true
+      - name: wh_orders_lq
+        description: The number of orders in the last quarter.
+        type: number
+        column: wh_orders_lq
+        public: true
+      - name: wh_orders_ly
+        description: The number of orders in the last year.
+        type: number
+        column: wh_orders_ly
+        public: true
+      - name: wh_orders_avg_daily
+        description: The average number of orders per day.
+        type: number
+        column: wh_orders_avg_daily
+        public: true
+      - name: wh_orders_l24
+        description: The number of orders in the last 24 hours.
+        type: number
+        column: wh_orders_l24
+        public: true
+      - name: updated_on
+        description: The timestamp when the warehouse data was last updated.
+        type: time
+        column: updated_on
+        public: true
+    measures:
+      - name: row_count
+        description: Distinct rows at natural grain (count distinct on primary key column).
+        type: count
+        sql: "{TABLE.warehouse_id}"
+    segments:
+      - name: pittsburgh_warehouse_access
+        sql: "{TABLE}.district = 'Pittsburgh'"
+        meta:
+          secure:
+            user_groups:
+              includes:
+                - pittsburgh_warehouse_users
+      - name: portland_warehouse_access
+        sql: "{TABLE}.district = 'Portland'"
+        meta:
+          secure:
+            user_groups:
+              includes:
+                - portland_warehouse_users
