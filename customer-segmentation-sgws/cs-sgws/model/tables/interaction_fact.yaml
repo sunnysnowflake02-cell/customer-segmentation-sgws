@@ -1,0 +1,58 @@
+tables:
+  - name: interaction_fact
+    title: Interaction Fact
+    sql: {{ load_sql('interaction_fact') }}
+    description: This table logs customer interactions across various channels.
+    public: true
+    dimensions:
+      - name: interaction_id
+        description: Unique identifier for the interaction.
+        type: string
+        column: interaction_id
+        primary_key: true
+        public: true
+      - name: customer_id
+        description: Identifier for the customer involved in the interaction.
+        type: string
+        column: customer_id
+        public: true
+      - name: interaction_type
+        description: Type of interaction (e.g., email, call).
+        type: string
+        column: interaction_type
+        public: true
+      - name: interaction_ts
+        description: Timestamp of the interaction.
+        type: time
+        column: interaction_ts
+        public: true
+      - name: channel
+        description: Channel through which the interaction occurred.
+        type: string
+        column: channel
+        public: true
+      - name: value
+        description: Value associated with the interaction (e.g., revenue generated).
+        type: number
+        column: value
+        public: true
+      - name: session_id
+        description: Identifier for the session during which the interaction occurred.
+        type: string
+        column: session_id
+        public: true
+      - name: created_at
+        description: Timestamp when the interaction record was created.
+        type: time
+        column: created_at
+        public: true
+      - name: ingestion_date
+        description: Timestamp when the interaction record was ingested.
+        type: time
+        column: ingestion_date
+        public: true
+    measures:
+      - name: row_count
+        description: Distinct rows at natural grain (count distinct on primary key column).
+        type: count
+        sql: "{TABLE.interaction_id}"

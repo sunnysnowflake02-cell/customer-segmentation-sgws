@@ -1,0 +1,62 @@
+name: customer-seg-rfm-dp
+version: v1alpha
+type: lens
+tags:
+  - Tier.Generated
+  - SemanticModelAgent
+description: |
+  The customer-seg-rfm-dp lens provides a comprehensive view of customer behavior by integrating core customer profiles, sales hierarchies, and transactional history. Stakeholders can quickly identify high-value customers, those at risk of churn, and opportunities for cross-selling, enabling targeted marketing strategies. Sales leadership can assess performance across territories, while finance and strategy teams can differentiate between stable revenue streams and risky spending patterns. This insight is crucial for making informed decisions that drive growth and enhance customer retention.
+layer: user
+owner: manpreetsingh
+workspace: public
+lens:
+  compute: runnable-default
+  secrets:
+    - name: githubrepo
+      allKeys: true
+  source:
+    type: minerva
+    name: minervac
+    catalog: icebase
+  repo:
+    url: https://github.com/sunnysnowflake02-cell/customer-segmentation-sgws
+    lensBaseDir: customer-segmentation-sgws/cs-sgws/model
+    syncFlags:
+      - --ref=main
+  api:
+    logLevel: info
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  router:
+    logLevel: info
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  worker:
+    logLevel: info
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  metric:
+    logLevel: info
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi

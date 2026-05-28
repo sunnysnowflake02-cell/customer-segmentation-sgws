@@ -1,0 +1,68 @@
+tables:
+  - name: cs_ml_segment_definition_resource
+    title: Customer Segment Definition Resource
+    sql: {{ load_sql('cs_ml_segment_definition_resource') }}
+    description: This table defines the segments used for customer segmentation.
+    public: true
+    dimensions:
+      - name: pk
+        description: Primary key for the segment definition record.
+        type: string
+        column: pk
+        primary_key: true
+        public: true
+      - name: segment_id
+        description: Identifier for the segment.
+        type: string
+        column: segment_id
+        public: true
+      - name: name
+        description: Name of the segment.
+        type: string
+        column: name
+        public: true
+      - name: description
+        description: Description of the segment.
+        type: string
+        column: description
+        public: true
+      - name: type
+        description: Type of the segment.
+        type: string
+        column: type
+        public: true
+      - name: rules
+        description: Rules defining the segment criteria.
+        type: string
+        column: rules
+        public: true
+      - name: model_params
+        description: Parameters used in the model for this segment.
+        type: string
+        column: model_params
+        public: true
+      - name: created_at
+        description: Timestamp when the segment definition was created.
+        type: time
+        column: created_at
+        public: true
+      - name: created_by
+        description: User who created the segment definition.
+        type: string
+        column: created_by
+        public: true
+      - name: _nilus_load_id
+        description: Load identifier for Nilus data.
+        type: string
+        column: _nilus_load_id
+        public: true
+      - name: _nilus_id
+        description: Identifier for Nilus record.
+        type: string
+        column: _nilus_id
+        public: true
+    measures:
+      - name: row_count
+        description: Distinct rows at natural grain (count distinct on primary key column).
+        type: count
+        sql: "{TABLE.pk}"

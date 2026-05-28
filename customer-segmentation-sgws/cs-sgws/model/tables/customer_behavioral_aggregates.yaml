@@ -1,0 +1,148 @@
+tables:
+  - name: customer_behavioral_aggregates
+    title: Customer Behavioral Aggregates
+    sql: {{ load_sql('customer_behavioral_aggregates') }}
+    description: This table aggregates customer behavior metrics for segmentation analysis.
+    public: true
+    joins:
+      - name: customer_dimension
+        relationship: many_to_one
+        sql: "{TABLE}.customer_id = {customer_dimension.customer_id}"
+    dimensions:
+      - name: customer_id
+        description: Identifier for the customer.
+        type: string
+        column: customer_id
+        primary_key: true
+        public: true
+      - name: as_of_date
+        description: Date for which the behavioral metrics are aggregated.
+        type: time
+        column: as_of_date
+        public: true
+      - name: recency_days_tx
+        description: Days since the last transaction.
+        type: number
+        column: recency_days_tx
+        public: true
+      - name: recency_days_int
+        description: Days since the last interaction.
+        type: number
+        column: recency_days_int
+        public: true
+      - name: frequency_30_d
+        description: Number of transactions in the last 30 days.
+        type: number
+        column: frequency_30_d
+        public: true
+      - name: frequency_90_d
+        description: Number of transactions in the last 90 days.
+        type: number
+        column: frequency_90_d
+        public: true
+      - name: monetary_30_d
+        description: Total monetary value of transactions in the last 30 days.
+        type: number
+        column: monetary_30_d
+        public: true
+      - name: monetary_90_d
+        description: Total monetary value of transactions in the last 90 days.
+        type: number
+        column: monetary_90_d
+        public: true
+      - name: avg_order_value
+        description: Average order value across transactions.
+        type: number
+        column: avg_order_value
+        public: true
+      - name: total_spend_lifetime
+        description: Total amount spent by the customer over their lifetime.
+        type: number
+        column: total_spend_lifetime
+        public: true
+      - name: num_page_visits_30_d
+        description: Number of page visits in the last 30 days.
+        type: number
+        column: num_page_visits_30_d
+        public: true
+      - name: session_duration_avg
+        description: Average duration of sessions.
+        type: number
+        column: session_duration_avg
+        public: true
+      - name: tenure_days
+        description: Total days since the customer joined.
+        type: number
+        column: tenure_days
+        public: true
+      - name: churn_risk_score
+        description: Score indicating the risk of customer churn.
+        type: number
+        column: churn_risk_score
+        public: true
+      - name: clv_predicted
+        description: Predicted customer lifetime value.
+        type: number
+        column: clv_predicted
+        public: true
+      - name: omni_ratio
+        description: Ratio of omnichannel interactions.
+        type: number
+        column: omni_ratio
+        public: true
+      - name: top_category_share
+        description: Share of the top category in total spending.
+        type: number
+        column: top_category_share
+        public: true
+      - name: category_diversity
+        description: Diversity of categories purchased by the customer.
+        type: number
+        column: category_diversity
+        public: true
+      - name: brand_loyalty
+        description: Score indicating brand loyalty.
+        type: number
+        column: brand_loyalty
+        public: true
+      - name: offer_response_rate
+        description: Rate of response to offers made to the customer.
+        type: number
+        column: offer_response_rate
+        public: true
+      - name: complaint_ratio
+        description: Ratio of complaints made by the customer.
+        type: number
+        column: complaint_ratio
+        public: true
+      - name: updated_at
+        description: Timestamp when the record was last updated.
+        type: time
+        column: updated_at
+        public: true
+      - name: ingestion_date
+        description: Timestamp when the record was ingested.
+        type: time
+        column: ingestion_date
+        public: true
+    measures:
+      - name: row_count
+        description: Distinct rows at natural grain (count distinct on primary key column).
+        type: count
+        sql: "{TABLE.customer_id}"
+      - name: avg_session_duration_avg
+        description: Average of session duration avg for rows in this grain.
+        type: avg
+        sql: "{TABLE.session_duration_avg}"
+      - name: avg_churn_risk_score
+        description: Average of churn risk score for rows in this grain.
+        type: avg
+        sql: "{TABLE.churn_risk_score}"
+      - name: avg_omni_ratio
+        description: Average of omni ratio for rows in this grain.
+        type: avg
+        sql: "{TABLE.omni_ratio}"
+      - name: avg_offer_response_rate
+        description: Average of offer response rate for rows in this grain.
+        type: avg
+        sql: "{TABLE.offer_response_rate}"

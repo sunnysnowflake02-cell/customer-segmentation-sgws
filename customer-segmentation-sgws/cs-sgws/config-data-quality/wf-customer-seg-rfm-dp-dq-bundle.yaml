@@ -1,0 +1,83 @@
+name: wf-customer-seg-rfm-dp-dq-bundle
+version: v1
+type: workflow
+tags:
+  - Quality.BusinessRule
+  - Tier.Generated
+  - SemanticModelAgent
+description: |
+  Consolidated business-rule data quality checks for this lens. One workflow;
+  multiple source datasets under stackSpec.inputs.
+workspace: public
+workflow:
+  dag:
+    - name: customer-seg-rfm-dp-dq-bundle
+      description: |
+        Consolidated DQ checks for approved steward rules (multi-table).
+      title: Consolidated business validation checks
+      spec:
+        stack: soda+python:1.0
+        logLevel: INFO
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:customer_segmentation/customer_behavioral_aggregates
+              options:
+                engine: minerva
+                clusterName: minervac
+              checks:
+                - row_count > 0:
+                    attributes:
+                      category: Freshness
+                      description: "Table must have data"
+                - failed rows:
+                    name: frequency_30_d_non_negative
+                    fail condition: |
+                      TRY_CAST(frequency_30_d AS DOUBLE) < 0
+                    attributes:
+                      category: Validity
+                      description: "The 'frequency_30_d' metric indicates how many transactions occurred in the last 30 days. Negative values would be nonsensical in this context, and ensuring this metric is non-negative is critical for accurate RFM analysis and customer segmentation."
+                - failed rows:
+                    name: monetary_30_d_non_negative
+                    fail condition: |
+                      TRY_CAST(monetary_30_d AS DOUBLE) < 0
+                    attributes:
+                      category: Validity
+                      description: "The 'monetary_30_d' column represents the total monetary value of transactions in the last 30 days. Negative values would indicate data errors, affecting the calculation of customer value and segmentation strategies. Validating this metric ensures accurate financial assessments."
+                - failed rows:
+                    name: recency_days_tx_not_null
+                    fail condition: |
+                      recency_days_tx IS NULL
+                    attributes:
+                      category: Completeness
+                      description: "The 'recency_days_tx' column should reflect the number of days since the last transaction for active customers. Given that some sample rows show null values, this indicates potential data quality issues that could mislead segmentation efforts, particularly in identifying at-risk customers."
+              profile:
+                columns:
+                  - "*"
+
+            - dataset: dataos://icebase:customer_segmentation/transaction_fact
+              options:
+                engine: minerva
+                clusterName: minervac
+              checks:
+                - row_count > 0:
+                    attributes:
+                      category: Freshness
+                      description: "Table must have data"
+                - failed rows:
+                    name: transaction_date_not_future
+                    fail condition: |
+                      TRY_CAST(transaction_date AS DATE) > CURRENT_DATE
+                    attributes:
+                      category: Validity
+                      description: "The 'transaction_date' should always represent a past or present date. Any future dates would indicate incorrect data entry or processing errors, which could significantly impact revenue forecasting and customer behavior analysis."
+              profile:
+                columns:
+                  - "*"

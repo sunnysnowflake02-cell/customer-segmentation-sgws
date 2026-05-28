@@ -1,0 +1,26 @@
+version: v1
+name: wf-customer-seg-rfm-dp-cadp-sc
+type: workflow
+description: |
+  Scanner workflow for consumer-aligned data product customer-seg-rfm-dp-cadp (metadata registration in DataOS).
+tags:
+  - Tier.Gold
+  - SemanticModelAgent
+workspace: public
+workflow:
+  dag:
+    - name: customer-seg-rfm-dp-cadp-scan
+      description: Scanner for customer-seg-rfm-dp-cadp (data product metadata registration).
+      title: Customer Seg Rfm Dp Cadp CADP scanner
+      spec:
+        stack: scanner:2.0
+        compute: runnable-default
+        stackSpec:
+          type: data-product
+          sourceConfig:
+            config:
+              type: DataProductMetadata
+              markDeletedDataProducts: true
+              dataProductFilterPattern:
+                includes:
+                  - customer-seg-rfm-dp-cadp

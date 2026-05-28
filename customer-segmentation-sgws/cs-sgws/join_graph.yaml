@@ -1,0 +1,54 @@
+version: v1
+lens: customer-seg-rfm-dp
+description: Semantic join graph for this product. Each Lens SQL file remains a single-table SELECT; relationships below define
+  how logical tables connect for analytics and validation.
+edges:
+- left_table: customer_behavioral_aggregates
+  right_table: customer_dimension
+  left_fqn: icebase.customer_segmentation.customer_behavioral_aggregates
+  right_fqn: icebase.customer_segmentation.customer_dimension
+  join_on:
+  - left: customer_id
+    right: customer_id
+  cardinality: many_to_one
+  id: 28a06e25-c857-4a8f-bcf4-8d7c55e4fa40
+  rationale: Join on customer_id to link behavioral metrics with customer profiles.
+- left_table: transaction_fact
+  right_table: customer_dimension
+  left_fqn: icebase.customer_segmentation.transaction_fact
+  right_fqn: icebase.customer_segmentation.customer_dimension
+  join_on:
+  - left: customer_id
+    right: customer_id
+  cardinality: many_to_one
+  id: 0ac64254-66ea-47e5-8a6a-af92480116a0
+  rationale: Join on customer_id to associate transactions with customer profiles.
+- left_table: cs_ml_segment_assignment_resource
+  right_table: customer_dimension
+  left_fqn: icebase.customer_segmentation.cs_ml_segment_assignment_resource
+  right_fqn: icebase.customer_segmentation.customer_dimension
+  join_on:
+  - left: customer_id
+    right: customer_id
+  cardinality: many_to_one
+  id: f1faf1b6-dbcb-4398-af32-e0d89a1de8b6
+  rationale: Join on customer_id to connect segment assignments with customer profiles.
+- left_table: cs_ml_segment_assignment_resource
+  right_table: cs_ml_segment_definition_resource
+  left_fqn: icebase.customer_segmentation.cs_ml_segment_assignment_resource
+  right_fqn: icebase.customer_segmentation.cs_ml_segment_definition_resource
+  join_on:
+  - left: segment_id
+    right: segment_id
+  cardinality: many_to_one
+  id: 17b6bf88-1b34-4992-92af-4f8951360e0d
+  rationale: Join on segment_id to link segment assignments to their definitions.
+- left_table: customer_dimension
+  right_table: interaction_fact
+  left_fqn: icebase.customer_segmentation.customer_dimension
+  right_fqn: icebase.customer_segmentation.interaction_fact
+  join_on:
+  - left: customer_id
+    right: customer_id
+  cardinality: many_to_one
+  id: new-1779968889028-ecdh2h

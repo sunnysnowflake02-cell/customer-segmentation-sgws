@@ -1,0 +1,76 @@
+tables:
+  - name: cs_ml_segment_assignment_resource
+    title: Customer Segment Assignment Resource
+    sql: {{ load_sql('cs_ml_segment_assignment_resource') }}
+    description: |
+      This table contains the assignment of customers to segments based on machine learning
+      models.
+    public: true
+    joins:
+      - name: cs_ml_segment_definition_resource
+        relationship: many_to_one
+        sql: "{TABLE}.segment_id = {cs_ml_segment_definition_resource.segment_id}"
+      - name: customer_dimension
+        relationship: many_to_one
+        sql: "{TABLE}.customer_id = {customer_dimension.customer_id}"
+    dimensions:
+      - name: pk
+        description: Primary key for the segment assignment record.
+        type: string
+        column: pk
+        primary_key: true
+        public: true
+      - name: assignment_id
+        description: Unique identifier for the assignment.
+        type: string
+        column: assignment_id
+        public: true
+      - name: customer_id
+        description: Identifier for the customer assigned to the segment.
+        type: string
+        column: customer_id
+        public: true
+      - name: segment_id
+        description: Identifier for the segment to which the customer is assigned.
+        type: string
+        column: segment_id
+        public: true
+      - name: model_version
+        description: Version of the model used for the assignment.
+        type: string
+        column: model_version
+        public: true
+      - name: assigned_date
+        description: Date when the customer was assigned to the segment.
+        type: time
+        column: assigned_date
+        public: true
+      - name: segment_score
+        description: Score representing the customer's fit within the segment.
+        type: number
+        column: segment_score
+        public: true
+      - name: created_at
+        description: Timestamp when the record was created.
+        type: time
+        column: created_at
+        public: true
+      - name: _nilus_load_id
+        description: Load identifier for Nilus data.
+        type: string
+        column: _nilus_load_id
+        public: true
+      - name: _nilus_id
+        description: Identifier for Nilus record.
+        type: string
+        column: _nilus_id
+        public: true
+    measures:
+      - name: row_count
+        description: Distinct rows at natural grain (count distinct on primary key column).
+        type: count
+        sql: "{TABLE.pk}"
+      - name: avg_segment_score
+        description: Average of segment score for rows in this grain.
+        type: avg
+        sql: "{TABLE.segment_score}"

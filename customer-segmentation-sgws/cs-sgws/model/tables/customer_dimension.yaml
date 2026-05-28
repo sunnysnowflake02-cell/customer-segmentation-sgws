@@ -1,0 +1,98 @@
+tables:
+  - name: customer_dimension
+    title: Customer Dimension
+    sql: {{ load_sql('customer_dimension') }}
+    description: This table contains detailed customer profile information.
+    public: true
+    joins:
+      - name: interaction_fact
+        relationship: many_to_one
+        sql: "{TABLE}.customer_id = {interaction_fact.customer_id}"
+    dimensions:
+      - name: customer_id
+        description: Unique identifier for the customer.
+        type: string
+        column: customer_id
+        primary_key: true
+        public: true
+      - name: external_id
+        description: External identifier for the customer.
+        type: string
+        column: external_id
+        public: true
+        meta:
+          secure:
+            func: redact
+            user_groups:
+              includes:
+                - masking_redacted
+      - name: acquisition_date
+        description: Date when the customer was acquired.
+        type: time
+        column: acquisition_date
+        public: true
+      - name: acquisition_channel
+        description: Channel through which the customer was acquired.
+        type: string
+        column: acquisition_channel
+        public: true
+      - name: geography
+        description: Geographical location of the customer.
+        type: string
+        column: geography
+        public: true
+      - name: demographics_json
+        description: JSON containing demographic information about the customer.
+        type: string
+        column: demographics_json
+        public: true
+      - name: customer_type
+        description: Type of customer (e.g., individual, business).
+        type: string
+        column: customer_type
+        public: true
+      - name: join_date
+        description: Date when the customer joined the organization.
+        type: time
+        column: join_date
+        public: true
+      - name: status
+        description: Current status of the customer (e.g., active, inactive).
+        type: string
+        column: status
+        public: true
+      - name: tenure_days
+        description: Total days the customer has been with the organization.
+        type: number
+        column: tenure_days
+        public: true
+      - name: lifecycle_stage
+        description: Current lifecycle stage of the customer.
+        type: string
+        column: lifecycle_stage
+        public: true
+      - name: preferred_channel
+        description: Preferred communication channel for the customer.
+        type: string
+        column: preferred_channel
+        public: true
+      - name: created_at
+        description: Timestamp when the customer record was created.
+        type: time
+        column: created_at
+        public: true
+      - name: updated_at
+        description: Timestamp when the customer record was last updated.
+        type: time
+        column: updated_at
+        public: true
+      - name: ingestion_date
+        description: Timestamp when the customer record was ingested.
+        type: time
+        column: ingestion_date
+        public: true
+    measures:
+      - name: row_count
+        description: Distinct rows at natural grain (count distinct on primary key column).
+        type: count
+        sql: "{TABLE.customer_id}"

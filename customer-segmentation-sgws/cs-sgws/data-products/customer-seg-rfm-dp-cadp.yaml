@@ -1,0 +1,123 @@
+name: customer-seg-rfm-dp-cadp
+version: v1beta
+entity: product
+type: data
+purpose: 'customer-seg-rfm-dp
+
+  '
+tags:
+- DPTier.Consumer Aligned
+- SemanticModelAgent
+description: 'customer-seg-rfm-dp
+
+  '
+owner: manpreetsingh
+v1beta:
+  data:
+    meta:
+      title: Customer Seg Rfm Dp
+      sourceCodeUrl: https://github.com/sunnysnowflake02-cell/customer-segmentation-sgws
+    collaborators:
+    - name: manpreetsingh
+      description: owner
+    resource:
+      description: 'This product helps teams track outcomes, spot issues early, and
+        align decisions for customer-seg-rfm-dp.
+
+
+        It packages steward-approved sources into one consistent analytic view so
+        everyone works from the same definitions for metrics and dimensions.
+
+
+        Technical validation and deployment notes are included in the bundle for platform
+        operators.
+
+        '
+      type: bundle
+      version: v1beta
+      refType: dataos
+      ref: bundle:v1beta:customer-seg-rfm-dp-bundle
+    inputs:
+    - name: icebase_customer_segmentation_cs_ml_segment_assignment_resource_input
+      description: 'Operational data describing cs ml segment assignment resource
+        in the customer segmentation area. Supports shared reporting and analytics
+        for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:customer_segmentation/cs_ml_segment_assignment_resource
+    - name: icebase_customer_segmentation_cs_ml_segment_definition_resource_input
+      description: 'Operational data describing cs ml segment definition resource
+        in the customer segmentation area. Supports shared reporting and analytics
+        for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:customer_segmentation/cs_ml_segment_definition_resource
+    - name: icebase_customer_segmentation_customer_behavioral_aggregates_input
+      description: 'Operational data describing customer behavioral aggregates in
+        the customer segmentation area. Supports shared reporting and analytics for
+        this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:customer_segmentation/customer_behavioral_aggregates
+    - name: icebase_customer_segmentation_customer_dimension_input
+      description: 'Operational data describing customer dimension in the customer
+        segmentation area. Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:customer_segmentation/customer_dimension
+    - name: icebase_customer_segmentation_interaction_fact_input
+      description: 'Operational data describing interaction fact in the customer segmentation
+        area. Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:customer_segmentation/interaction_fact
+    - name: icebase_customer_segmentation_transaction_fact_input
+      description: 'Operational data describing transaction fact in the customer segmentation
+        area. Supports shared reporting and analytics for this product.
+
+        '
+      purpose: source
+      refType: dataos
+      ref: dataos://icebase:customer_segmentation/transaction_fact
+    outputs: []
+    ports:
+      lens:
+        ref: lens:v1alpha:customer-seg-rfm-dp:public
+        refType: dataos
+        meta:
+          description: 'Business-ready semantic model for this data product domain.
+
+            '
+      rest:
+      - url: https://known-racer.mydataos.com/lens2/api/public:customer-seg-rfm-dp/v2/rest
+        meta:
+          description: 'REST API for programmatic access to the semantic model (filters
+            and measures as exposed by the deployed Lens).
+
+            '
+      postgres:
+      - host: tcp.known-racer.mydataos.com
+        port: 5432
+        params:
+          ssl: true
+        meta:
+          description: 'PostgreSQL access for BI tools against the semantic layer
+            (when enabled for this workspace).
+
+            '
+      graphql:
+      - url: https://known-racer.mydataos.com/lens2/api/public:customer-seg-rfm-dp/v2/graphql
+        meta:
+          description: 'GraphQL API for flexible queries over the semantic model schema.
+
+            '

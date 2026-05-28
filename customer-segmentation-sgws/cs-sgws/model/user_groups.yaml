@@ -1,0 +1,29 @@
+user_groups:
+  - name: masking_redacted
+    api_scopes:
+      - meta
+      - data
+      - graphql
+      - jobs
+      - source
+    includes: '*'
+  - name: high_value_marketers
+    api_scopes:
+      - meta
+      - data
+      - graphql
+      - jobs
+      - source
+    includes:
+      - users:id:marketing_user_1
+      - users:id:marketing_user_2
+  - name: retention_teams
+    api_scopes:
+      - meta
+      - data
+      - graphql
+      - jobs
+      - source
+    includes:
+      - users:id:retention_user_1
+      - users:id:retention_user_2

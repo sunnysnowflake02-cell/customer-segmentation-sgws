@@ -1,0 +1,98 @@
+tables:
+  - name: transaction_fact
+    title: Transaction Fact
+    sql: {{ load_sql('transaction_fact') }}
+    description: This table logs customer transactions including sales details.
+    public: true
+    joins:
+      - name: customer_dimension
+        relationship: many_to_one
+        sql: "{TABLE}.customer_id = {customer_dimension.customer_id}"
+    dimensions:
+      - name: transaction_id
+        description: Unique identifier for the transaction.
+        type: string
+        column: transaction_id
+        primary_key: true
+        public: true
+      - name: customer_id
+        description: Identifier for the customer who made the transaction.
+        type: string
+        column: customer_id
+        public: true
+      - name: transaction_date
+        description: Date when the transaction occurred.
+        type: time
+        column: transaction_date
+        public: true
+      - name: product_id
+        description: Identifier for the product involved in the transaction.
+        type: string
+        column: product_id
+        public: true
+      - name: quantity
+        description: Quantity of products purchased in the transaction.
+        type: number
+        column: quantity
+        public: true
+      - name: amount
+        description: Total amount of the transaction.
+        type: number
+        column: amount
+        public: true
+      - name: discount
+        description: Discount applied to the transaction.
+        type: number
+        column: discount
+        public: true
+      - name: payment_type
+        description: Type of payment used for the transaction.
+        type: string
+        column: payment_type
+        public: true
+      - name: channel
+        description: Channel through which the transaction occurred.
+        type: string
+        column: channel
+        public: true
+      - name: is_return
+        description: Indicates if the transaction is a return.
+        type: boolean
+        column: is_return
+        public: true
+      - name: return_date
+        description: Date when the return was processed, if applicable.
+        type: time
+        column: return_date
+        public: true
+      - name: created_at
+        description: Timestamp when the transaction record was created.
+        type: time
+        column: created_at
+        public: true
+      - name: ingestion_date
+        description: Timestamp when the transaction record was ingested.
+        type: time
+        column: ingestion_date
+        public: true
+    measures:
+      - name: row_count
+        description: Distinct rows at natural grain (count distinct on primary key column).
+        type: count
+        sql: "{TABLE.transaction_id}"
+      - name: total_transaction_amount
+        description: Total amount of all transactions.
+        type: sum
+        sql: "SUM({TABLE.amount})"
+      - name: total_quantity_sold
+        description: Total quantity of products sold across all transactions.
+        type: sum
+        sql: "SUM({TABLE.quantity})"
+      - name: total_discount_given
+        description: Total discount applied across all transactions.
+        type: sum
+        sql: "SUM({TABLE.discount})"
+      - name: transaction_count
+        description: Count of all transactions.
+        type: count
+        sql: "COUNT({TABLE.transaction_id})"
